@@ -1,89 +1,42 @@
 import streamlit as st
 import requests
-from datetime import datetime
-import pandas as pd
-import pickle
-from PIL import Image
-import time
+import json
 
 
-
-# Appel à l'API pour récupérer les informations de vol
-url = "https://newappell.azurewebsites.net/"
-#url = "http://localhost:8501/"
-response = requests.get(url)
-# flights = response.json()
-url1 = "https://newappell.azurewebsites.net/predict"
-#url1 = "http://localhost:8501/predict"
+st.set_page_config(page_title = "streamlit",
+                   layout = "wide",
+                   )
 
 
-
-
-# Fonction pour la page "Ajouter"
-def add_page():
-
-
-    st.title("Formulaire d'entrée pour les mesures d'une fleur")
-
-    # Créer des widgets pour les mesures de la fleur
-    sepal_length = st.number_input("Longueur du sépale", value=5.7, step=0.1)
-    sepal_width = st.number_input("Largeur du sépale", value=3.1, step=0.1)
-    petal_length = st.number_input("Longueur du pétale", value=4.9, step=0.1)
-    petal_width = st.number_input("Largeur du pétale", value=2.2, step=0.1)
-
-    # Afficher les mesures de la fleur
-    st.write("Mesures de la fleur:")
-    st.write(f"Longueur du sépale: {sepal_length}")
-    st.write(f"Largeur du sépale: {sepal_width}")
-    st.write(f"Longueur du pétale: {petal_length}")
-    st.write(f"Largeur du pétale: {petal_width}")
-    st.title("MODEL IRIS")
-
-
-    if st.button("Ajouter Fleur", key="ajouter_fleur_button"):
-        iris_data = {
-                "sepal_length": sepal_length ,
-                "sepal_width":sepal_width,
-                "petal_length":petal_length,
-                "petal_width":petal_width
-            }
-
-            # Envoyer les données à l'API
-        response = requests.get(url1, json=iris_data)
-            # Vérifier si la requête a réussi
-        if response.ok:
-                with st.spinner('Wait for it...'):
-                    time.sleep(2)
-                st.success("Les informations de votre fleur ont été ajouté avec succès !")
-                st.write(f"La fleure est : {response.json()['prediction']}.")
-                st.write(f"Avec une probabilité d'exactitude de : {response.json()['probability']}.")
-
-        else:
-                st.error("Erreur lors de l'ajout des informations de votre fleur.")
-
-data = {
-    "prediction" : response.json()['prediction'],
-    "probability" : response.json()['probability']
+headers = {
+   'accept': 'application/json',
+   'Content-Type': 'application/json',
 }
-response = requests.post(url2, json=data)
-print(response)
-# Fonction pour la page "Métriques"
-def metrics_page():
-    st.title("Graphes")
 
+sl = st.text_input('sepal_length', '0')
+sw = st.text_input('sepal_width', '0')
+pl = st.text_input('petal_length', '0')
+pw = st.text_input('petal_width', '0')
 
-#---------------------  Sidebar  ----------------------#
-# Menu déroulant pour sélectionner la page à afficher
-menu = ["iris", "Graphes"]
-choice = st.sidebar.selectbox(" ", menu)
-# st.sidebar.title("IRIS")
-# image = Image.open('img1.PNG')
-# im = image.resize((150, 250))
-# st.sidebar.image(im, caption='Sunrise by the mountains')
+if st.button('predict'):
+    data = f'{{"sepal_length": {sl},"sepal_width": {sw},"petal_length": {pl},"petal_width": {pw}}}'
+    response = requests.post('https://newappell.azurewebsites.net/predict', headers=headers, data=data)
+    st.write(response.text)
 
+    response_json = json.loads(response.text)
+    prediction = response_json["prediction"]
+    probability = response_json["probability"]
 
-# Affichage de la page correspondant à la sélection du menu
-if choice == "iris":
-    add_page()
-else:
-    metrics_page()
+    truc = f"{sl} {sw} {pl} {pw}"
+
+    inputs = {
+        "input": truc,
+        "prediction": prediction,
+        "probabilité": probability
+    }
+
+    add = requests.post('https://newappell.azurewebsites.net/add', headers=headers, json=inputs)
+
+if st.button('clear'):
+    delete = requests.post('https://newappell.azurewebsites.net/del', headers= headers)
+    st.write(delete.text)
