@@ -61,9 +61,16 @@ def add_page():
         else:
                 st.error("Erreur lors de l'ajout des informations de votre fleur.")
 
+data = {
+    "prediction" : response.json()['prediction'],
+    "probability" : response.json()['probability']
+}
+response = requests.post(url2, json=data)
+
 # Fonction pour la page "Métriques"
 def metrics_page():
     st.title("Graphes")
+
 
 #---------------------  Sidebar  ----------------------#
 # Menu déroulant pour sélectionner la page à afficher
