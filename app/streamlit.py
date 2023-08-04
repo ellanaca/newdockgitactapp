@@ -66,7 +66,7 @@ data = {
     "probability" : response.json()['probability']
 }
 response = requests.post(url2, json=data)
-
+print(response)
 # Fonction pour la page "Métriques"
 def metrics_page():
     st.title("Graphes")
