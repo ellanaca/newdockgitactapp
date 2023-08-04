@@ -2,7 +2,7 @@
 FROM python:3.8
 
 # Copiez le contenu de votre projet dans l'image
-COPY . /app
+COPY app/. /app
 
 # Définissez le répertoire de travail (le répertoire où vos commandes seront exécutées)
 WORKDIR /app
