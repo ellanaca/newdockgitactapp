@@ -2,7 +2,8 @@
 FROM python:3.8
 
 # Copiez le contenu de votre projet dans l'image
-COPY app/. /app
+COPY app/requirements.txt /app/requirements.txt
+COPY app/streamlit.py /app/streamlit.py
 
 # Définissez le répertoire de travail (le répertoire où vos commandes seront exécutées)
 WORKDIR /app
