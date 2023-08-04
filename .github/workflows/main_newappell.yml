@@ -22,15 +22,15 @@ jobs:
     - name: Log in to registry
       uses: docker/login-action@v2
       with:
-        registry: https://newcontain.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_35a0ce353ca7426f93a220d77c95eedc }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_3befba1c42d04a83893aa30f152678e9 }}
+        registry: https://newcontain1.azurecr.io/
+        username: ${{ secrets.AzureAppService_ContainerUsername_d8b66fdd02104da7bb3c11719bd9248b }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_7156009f72b34c03904a40419f77666d }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: newcontain.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_35a0ce353ca7426f93a220d77c95eedc }}/newdockgitactapp:${{ github.sha }}
+        tags: newcontain1.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_d8b66fdd02104da7bb3c11719bd9248b }}/newdockgitactapp1:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -47,5 +47,5 @@ jobs:
       with:
         app-name: 'newappell'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_5bf6fa2c017548ad911f9ace1930b9b6 }}
-        images: 'newcontain.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_35a0ce353ca7426f93a220d77c95eedc }}/newdockgitactapp:${{ github.sha }}'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_b361f909b50140d9bf743f564a0171a6 }}
+        images: 'newcontain1.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_d8b66fdd02104da7bb3c11719bd9248b }}/newdockgitactapp1:${{ github.sha }}'
