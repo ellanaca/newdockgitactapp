@@ -7,9 +7,12 @@ COPY . /app
 # Définissez le répertoire de travail (le répertoire où vos commandes seront exécutées)
 WORKDIR /app
 
+
 # Installez les dépendances à partir du fichier requirements.txt
 RUN pip install -r requirements.txt
 
 
+EXPOSE 8501
+
 # Commande pour exécuter votre application Streamlit
-CMD ["streamlit", "run", "streamlit_app.py"]
+CMD ["streamlit", "run", "app/streamlit.py","--server.port", "8501"]

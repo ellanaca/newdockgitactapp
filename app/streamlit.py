@@ -9,10 +9,12 @@ import time
 
 
 # Appel à l'API pour récupérer les informations de vol
-url = "https://dockeract.azurewebsites.net/"
+url = "https://newappell.azurewebsites.net/"
+#url = "http://localhost:8501/"
 response = requests.get(url)
 # flights = response.json()
-url1 = "https://dockeract.azurewebsites.net/predict"
+url1 = "https://newappell.azurewebsites.net/predict"
+#url1 = "http://localhost:8501/predict"
 
 
 
